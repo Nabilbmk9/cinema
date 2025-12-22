@@ -1,8 +1,3 @@
-# Journal des décisions techniques
-
-Ce document trace les décisions importantes prises pendant le développement
-du test technique.
-
 ## Décision — Auth personnalisée (Auteur / Spectateur)
 
 ### Choix retenu
@@ -20,3 +15,8 @@ Un seul modèle `User` basé sur `AbstractUser` avec un champ `role` :
 User unique + profils `AuthorProfile` / `SpectatorProfile` (OneToOne) :
 - meilleure séparation des champs spécifiques,
 - mais complexité supplémentaire inutile pour ce test.
+
+### Implémentation
+- Modèle : `src/users/models.py`
+- Configuration : `AUTH_USER_MODEL = "users.User"` dans `src/cinema/settings.py`
+- Migration : `src/users/migrations/0001_initial.py`
