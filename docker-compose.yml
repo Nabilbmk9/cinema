@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-cinema}
+      POSTGRES_USER: ${POSTGRES_USER:-cinema}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cinema}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    command: sh -c "python src/manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  pgdata:
