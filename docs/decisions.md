@@ -92,6 +92,9 @@ Mettre en place une API REST sécurisée par JWT avec Django REST Framework et S
 - Actions spectateur :
   - favoris (`/api/me/favorites/`)
   - notations film/auteur (`/api/me/ratings/...`)
+- CRUD auteurs/films :
+  - auteurs modifiables/supprimables, avec blocage de suppression si films associés
+  - films modifiables et action d'archivage (`POST /api/movies/{id}/archive/`)
 - Permissions dédiées : `IsSpectator`
 - Tests manuels validés via requêtes HTTP (PowerShell)
 

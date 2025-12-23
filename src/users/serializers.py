@@ -20,6 +20,7 @@ class AuthorSerializer(serializers.ModelSerializer):
             "avatar_url",
             "role",
         )
+        read_only_fields = ("id", "username", "role", "source", "tmdb_id")
 
 
 class SpectatorPublicSerializer(serializers.ModelSerializer):
