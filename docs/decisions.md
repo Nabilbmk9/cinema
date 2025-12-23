@@ -68,3 +68,30 @@ Créer une app `movies` avec :
 - Modèles : `src/movies/models.py`
 - Admin : `src/movies/admin.py` + enrichissement `src/users/admin.py`
 - Migrations : `src/movies/migrations/0001_initial.py` (si présent)
+
+---
+
+## Décision — API REST + JWT pour les actions spectateur
+
+### Choix retenu
+Mettre en place une API REST sécurisée par JWT avec Django REST Framework et SimpleJWT.
+
+### Pourquoi
+- L’énoncé impose une API REST complète avec authentification JWT.
+- JWT permet une séparation claire entre :
+  - lecture publique (films / auteurs)
+  - actions protégées (favoris, notations).
+- Les permissions par rôle (`AUTHOR` / `SPECTATOR`) sont explicites et testables.
+
+### Implémentation
+- Auth JWT : `djangorestframework-simplejwt`
+- Endpoints :
+  - `POST /api/auth/register/`
+  - `POST /api/token/`
+  - `POST /api/auth/logout/`
+- Actions spectateur :
+  - favoris (`/api/me/favorites/`)
+  - notations film/auteur (`/api/me/ratings/...`)
+- Permissions dédiées : `IsSpectator`
+- Tests manuels validés via requêtes HTTP (PowerShell)
+
