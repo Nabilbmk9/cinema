@@ -13,6 +13,5 @@ class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
         qs = User.objects.filter(role=User.Role.AUTHOR).order_by("username")
         source = self.request.query_params.get("source")
         if source:
-            # source filter côté auteurs viendra quand on aura "source" sur auteurs aussi (TMDb import)
-            pass
+            qs = qs.filter(source=source)
         return qs

@@ -7,11 +7,22 @@ class User(AbstractUser):
         AUTHOR = "AUTHOR", "Author"
         SPECTATOR = "SPECTATOR", "Spectator"
 
+    class Source(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        TMDB = "TMDB", "TMDb"
+
     role = models.CharField(
         max_length=20,
         choices=Role.choices,
         default=Role.SPECTATOR,
     )
+
+    source = models.CharField(
+        max_length=10,
+        choices=Source.choices,
+        default=Source.ADMIN,
+    )
+    tmdb_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
 
     # Champs demandés / utiles
     full_name = models.CharField(max_length=255, blank=True)

@@ -95,3 +95,16 @@ Mettre en place une API REST sécurisée par JWT avec Django REST Framework et S
 - Permissions dédiées : `IsSpectator`
 - Tests manuels validés via requêtes HTTP (PowerShell)
 
+### Note sur les emails des auteurs TMDb
+L’API TMDb ne fournit pas d’adresse email pour les auteurs.
+Le modèle utilisateur imposant un email unique, un email fictif
+stable de la forme `tmdb_<id>@example.invalid` est utilisé.
+
+Ce choix permet :
+- d’éviter toute collision en base
+- de conserver l’unicité
+- de garantir un import idempotent
+
+En production, ce champ serait soit nullable,
+soit géré via un modèle auteur distinct.
+
