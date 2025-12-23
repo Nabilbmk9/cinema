@@ -5,11 +5,12 @@ from rest_framework.response import Response
 
 from .models import Movie, MovieStatus
 from .serializers import MovieSerializer
+from cinema.permissions import ReadOnlyOrAdmin
 
 
 class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [ReadOnlyOrAdmin]
 
     def get_queryset(self):
         qs = (

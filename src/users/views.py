@@ -4,11 +4,12 @@ from rest_framework.permissions import AllowAny
 
 from .models import User
 from .serializers import AuthorSerializer
+from cinema.permissions import ReadOnlyOrAdmin
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [ReadOnlyOrAdmin]
 
     def get_queryset(self):
         qs = User.objects.filter(role=User.Role.AUTHOR).order_by("username")
