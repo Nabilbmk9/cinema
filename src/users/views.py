@@ -1,3 +1,18 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
 
-# Create your views here.
+from .models import User
+from .serializers import AuthorSerializer
+
+
+class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = AuthorSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        qs = User.objects.filter(role=User.Role.AUTHOR).order_by("username")
+        source = self.request.query_params.get("source")
+        if source:
+            # source filter côté auteurs viendra quand on aura "source" sur auteurs aussi (TMDb import)
+            pass
+        return qs
