@@ -20,3 +20,51 @@ User unique + profils `AuthorProfile` / `SpectatorProfile` (OneToOne) :
 - Modèle : `src/users/models.py`
 - Configuration : `AUTH_USER_MODEL = "users.User"` dans `src/cinema/settings.py`
 - Migration : `src/users/migrations/0001_initial.py`
+
+
+---
+
+## Décision — Servir les fichiers statiques (Admin) en Docker
+
+### Problème
+L’interface Django admin s’affichait sans CSS dans l’environnement Docker (URLs `/static/...` non servies).
+
+### Choix retenu
+Utiliser **WhiteNoise** pour servir les fichiers statiques via Django, y compris en environnement Docker.
+
+### Pourquoi
+- Solution simple, standard, et robuste pour servir `/static/`.
+- Évite une configuration Nginx dédiée juste pour le dev.
+- Permet de garantir que l’admin reste utilisable dans le contexte du test.
+
+### Implémentation
+- Dépendance : `whitenoise` dans `requirements.txt`
+- Middleware : `whitenoise.middleware.WhiteNoiseMiddleware` dans `src/cinema/settings.py`
+- Static root : `STATIC_ROOT = BASE_DIR / "staticfiles"`
+- Collecte : `python manage.py collectstatic`
+- Gitignore : `staticfiles/`
+
+---
+
+## Décision — Modélisation Films / Favoris / Notations
+
+### Choix retenu
+Créer une app `movies` avec :
+- `Movie` (film) + champs métier (titre, description, date, statut, évaluation)
+- relation `Movie.authors` en ManyToMany vers `users.User` filtré sur `role=AUTHOR`
+- `Favorite` (spectateur ↔ film)
+- `MovieRatingNote` (spectateur ↔ film)
+- `AuthorRatingNote` (spectateur ↔ auteur)
+
+### Pourquoi
+- Couvre directement les exigences : favoris + notations film/auteur.
+- ManyToMany pour refléter le cas réel (plusieurs auteurs pour un film).
+- Tables dédiées `Favorite`/`*RatingNote` pour :
+  - empêcher les doublons (`unique_together`)
+  - stocker des métadonnées (date, commentaire)
+- Ajout d’un champ `source` (ADMIN/TMDB) pour permettre le filtrage demandé (contenu créé manuellement vs import TMDb).
+
+### Implémentation
+- Modèles : `src/movies/models.py`
+- Admin : `src/movies/admin.py` + enrichissement `src/users/admin.py`
+- Migrations : `src/movies/migrations/0001_initial.py` (si présent)
