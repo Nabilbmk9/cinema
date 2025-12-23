@@ -18,3 +18,6 @@ venv/
 # Environment variables
 .env
 .env.*
+
+# Django static
+staticfiles/
