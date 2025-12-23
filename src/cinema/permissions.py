@@ -4,7 +4,7 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 class ReadOnlyOrAdmin(BasePermission):
     """
     Anonyme : accès en lecture seule.
-    Utilisateur staff/admin : accès complet.
+    Utilisateur staff/admin: accès complet.
     """
 
     def has_permission(self, request, view):
